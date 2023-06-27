@@ -19,10 +19,14 @@ dbExecute(con, "USE cla_tntlab")
 
 # 
 # Display the total number of managers.
-dbGetQuery(con," SELECT COUNT(employee_id) AS total_number_managers FROM datascience_8960_table;")
+dbGetQuery(con,
+           "SELECT COUNT(employee_id) AS total_number_managers 
+           FROM datascience_8960_table;")
 
 # Display the total number of unique managers (i.e., unique by id number).
-dbGetQuery(con, "SELECT COUNT(DISTINCT employee_id) AS total_number_uq_managers FROM datascience_8960_table;")
+dbGetQuery(con, 
+           "SELECT COUNT(DISTINCT employee_id) AS total_number_uq_managers 
+           FROM datascience_8960_table;")
 
 # Display a summary of the number of managers split by location,
 # but only include those who were not originally hired as managers.
