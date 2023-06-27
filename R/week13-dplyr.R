@@ -9,13 +9,22 @@ con <- dbConnect(MariaDB(),
                  username = 'demek004', 
                  password = key_get("latis-mysql","demek004"), 
                  port = 3306,
-                 ssl.ca = 'mysql_hotel_umn_20220728_interm.cer')
+                 ssl.ca = '../mysql_hotel_umn_20220728_interm.cer')
 
 
+
+#dbExecute(con, "USE cla_tntlab")
 
 
 #Data Import and Cleaning
 
+#After setting up MySQL Workbench and configuring the connection to my personal user/pass with dbConnect() and keyring, I used 
+#workbench to test a query to display all columns from the datascience_8960_table table. This query was successful in 
+#workbench so I then used dbGetQuery() to import this table into R and assigned it to week13_tbl then saved it to csv in data folder
+
+
+week13_tbl <- dbGetQuery(con, "SELECT * FROM cla_tntlab.datascience_8960_table;") %>% 
+  write_csv("../data/week13.csv")
 
 # create a dataset called week13_tbl containing the contents of the table you have access to on LATIS. Save this as week13.csv (you can place this in data, since it is an exact copy of original data).
 # Using dplyr and base functions alone, do the following:
