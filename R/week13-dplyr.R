@@ -13,8 +13,6 @@ con <- dbConnect(MariaDB(),
 
 
 
-#dbExecute(con, "USE cla_tntlab")
-
 
 #Data Import and Cleaning
 
@@ -23,26 +21,39 @@ con <- dbConnect(MariaDB(),
 #workbench so I then used dbGetQuery() to import this table into R and assigned it to week13_tbl then saved it to csv in data folder
 
 
-week13_tbl <- dbGetQuery(con, "SELECT * FROM cla_tntlab.datascience_8960_table;") %>% 
-  write_csv("../data/week13.csv")
+# week13_tbl <- dbGetQuery(con, "SELECT * FROM cla_tntlab.datascience_8960_table;") %>% 
+#   write_csv("../data/week13.csv")
 
-# Using dplyr and base functions alone, do the following:
-# Display the total number of managers. DONE
-# Display the total number of unique managers (i.e., unique by id number). DONE
-# Display a summary of the number of managers split by location, but only include those who were not originally hired as managers.
-# Display the average and standard deviation of number of years of employment split by performance level (bottom, middle, and top).
-# Display the location and ID numbers of the top 3 managers from each location, in alphabetical order by location and then descending order of test score. If there are ties, include everyone reaching rank 3.
+week13_tbl <- read_csv("../data/week13.csv")
 
+
+#Analysis
+
+#First statement just displays number of rows 
 
 total_number_managers <- week13_tbl %>% 
-  filter(manager_hire == "Y") %>% 
   nrow() %>%  print()
 
+#Second statement adds distinct() select only one row per unique employee id. The displayed count
+#is the same as above which means that none of the manager ids were duplicated over more than one row
+
 total_number_uq_managers <- week13_tbl %>% 
-  filter(manager_hire == "Y") %>% 
   distinct(employee_id) %>% 
   nrow() %>%  print()
   
+
+#Third statement chunk filters those not hired originally as mangers based on Y/N manager_hire variable. I then used
+#group_by to split by city location and summarise() to count the length of the employee_id vector in each group
+
+mgr_by_location <- week13_tbl %>% 
+  filter(manager_hire == 'N') %>% 
+  group_by(city) %>% 
+  summarise(no_mgrs = length(employee_id)) %>% 
+  print()
+
+
+# Display the average and standard deviation of number of years of employment split by performance level (bottom, middle, and top).
+# Display the location and ID numbers of the top 3 managers from each location, in alphabetical order by location and then descending order of test score. If there are ties, include everyone reaching rank 3.
 
 
 
