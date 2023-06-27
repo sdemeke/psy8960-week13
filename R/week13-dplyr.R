@@ -1,15 +1,16 @@
 #Script Settings and Resources
+#I blocked out steps to connect with MySQL and call on database because I have already saved table as week13.csv in data folder
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(tidyverse)
-library(RMariaDB)
-library(keyring)
-
-con <- dbConnect(MariaDB(), 
-                 host = 'mysql-prod5.oit.umn.edu', 
-                 username = 'demek004', 
-                 password = key_get("latis-mysql","demek004"), 
-                 port = 3306,
-                 ssl.ca = '../mysql_hotel_umn_20220728_interm.cer')
+# library(RMariaDB)
+# library(keyring)
+# 
+# con <- dbConnect(MariaDB(), 
+#                  host = 'mysql-prod5.oit.umn.edu', 
+#                  username = 'demek004', 
+#                  password = key_get("latis-mysql","demek004"), 
+#                  port = 3306,
+#                  ssl.ca = '../mysql_hotel_umn_20220728_interm.cer')
 
 
 
@@ -18,11 +19,11 @@ con <- dbConnect(MariaDB(),
 
 #After setting up MySQL Workbench and configuring the connection to my personal user/pass with dbConnect() and keyring, I used 
 #workbench to test a query to display all columns from the datascience_8960_table table. This query was successful in 
-#workbench so I then used dbGetQuery() to import this table into R and assigned it to week13_tbl then saved it to csv in data folder
+#workbench so I then used dbGetQuery() to import this table into R, saved it in data, and read in as week13_tbl 
 
 
-dbGetQuery(con, "SELECT * FROM cla_tntlab.datascience_8960_table;") %>%
-  write_csv("../data/week13.csv")
+# dbGetQuery(con, "SELECT * FROM cla_tntlab.datascience_8960_table;") %>%
+#   write_csv("../data/week13.csv")
 
 week13_tbl <- read_csv("../data/week13.csv")
 
