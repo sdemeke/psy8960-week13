@@ -30,13 +30,24 @@ dbGetQuery(con, "SELECT city, COUNT(employee_id) AS no_mgrs FROM datascience_896
 
 # Display the average and standard deviation of number of years of employment 
   #split by performance level (bottom, middle, and top).
+dbGetQuery(con, "SELECT performance_group, ROUND(AVG(yrs_employed),2) AS avg_yrs, ROUND(STDDEV_SAMP(yrs_employed),3) AS sd_yrs FROM datascience_8960_table GROUP BY performance_group;
+")
 
 
-# Display the location and ID numbers of the top 3 managers from each location, 
-  #in alphabetical order by location and then descending order of test score. 
-  #If there are ties, include everyone reaching rank 3. You’ll probably need this guideLinks to an external site..
+#For this final step, I followed information in provided guide about over clauses and using WITH(). Within the WITH statement,
+#I select the city, ID, test score column and assign a new test_rank variable that labels each ID with a value denoting relative rank
+#on test_score. The over clause here determines that the RANK() be in descending order of test score within each city. Finally, an additional
+#ORDER BY statement outside of the over clause sorts the rows by alphabetical order of location.
+#Finally, outside of WITH(), I call on the temporary viewset and select the two desired column and display only those individuals
+#with rank up to 3.
 
-
-
-
+dbGetQuery(con,
+"WITH added_test_rank AS (
+  SELECT	city, employee_id, test_score, RANK() OVER(PARTITION BY city ORDER BY test_score DESC) AS test_rank 
+  FROM datascience_8960_table 
+  ORDER BY city)
+SELECT city, employee_id 
+FROM added_test_rank
+WHERE test_rank <= 3;"
+)
 
