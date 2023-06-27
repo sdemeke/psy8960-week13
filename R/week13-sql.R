@@ -19,13 +19,10 @@ dbExecute(con, "USE cla_tntlab")
 
 # 
 # Display the total number of managers.
-dbGetQuery(con,"SELECT COUNT(employee_id) AS total_number_managers 
-           FROM datascience_8960_table;")
+dbGetQuery(con," SELECT COUNT(employee_id) AS total_number_managers FROM datascience_8960_table;")
 
 # Display the total number of unique managers (i.e., unique by id number).
-dbGetQuery(con, 
-           "SELECT COUNT(DISTINCT employee_id) AS total_number_uq_managers 
-           FROM datascience_8960_table;")
+dbGetQuery(con, "SELECT COUNT(DISTINCT employee_id) AS total_number_uq_managers FROM datascience_8960_table;")
 
 # Display a summary of the number of managers split by location,
 # but only include those who were not originally hired as managers.
@@ -37,12 +34,12 @@ dbGetQuery(con,
 
 
 # Display the average and standard deviation of number of years of employment 
-  #split by performance level (bottom, middle, and top).
+#split by performance level (bottom, middle, and top).
 dbGetQuery(con, 
            "SELECT performance_group, ROUND(AVG(yrs_employed),2) AS avg_yrs, ROUND(STDDEV_SAMP(yrs_employed),3) AS sd_yrs 
            FROM datascience_8960_table 
            GROUP BY performance_group;"
-           )
+)
 
 
 #For this final step, I followed information in provided guide about over clauses and using WITH(). Within the WITH statement,
@@ -53,7 +50,7 @@ dbGetQuery(con,
 #with rank up to 3.
 
 dbGetQuery(con,
-          "WITH added_test_rank AS (
+           "WITH added_test_rank AS (
            SELECT	city, employee_id, test_score, RANK() OVER(PARTITION BY city ORDER BY test_score DESC) AS test_rank 
            FROM datascience_8960_table 
            ORDER BY city)
@@ -61,5 +58,4 @@ dbGetQuery(con,
            SELECT city, employee_id 
            FROM added_test_rank
            WHERE test_rank <= 3;"
-          )
-
+)
