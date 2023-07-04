@@ -30,20 +30,20 @@ week13_tbl <- read_csv("../data/week13.csv")
 
 #Analysis
 
-#First statement just displays number of rows and since there are no NAs, displays total number of managers 
+#First statement just displays number of rows and since there are no NAs, it displays total number of managers 
 
 week13_tbl %>% 
   nrow()
 
 #Second statement adds distinct() select only one row per unique employee id. The displayed count
-#is the same as above which means that none of the manager ids were duplicated over more than one row
+#is the same as above which means that none of the manager ids were duplicated  
 
 week13_tbl %>% 
   distinct(employee_id) %>% 
   nrow()
   
 
-#Third statement chunk filters those not hired originally as mangers based on Y/N manager_hire variable. I then used
+#Third chunk filters those not hired originally as mangers based on Y/N manager_hire variable. I then used
 #group_by to split by city location and summarise() to count the length of the employee_id vector in each group
 
 week13_tbl %>% 
@@ -60,16 +60,19 @@ week13_tbl %>%
             sd_yrs = sd(yrs_employed, na.rm = T))
 
 
-# Display the location and ID numbers of the top 3 managers from each location, in alphabetical order by location and then descending order of test score. If there are ties, include everyone reaching rank 3.
-#To display top 3 scoring (with ties) manager by location, I first grouped the df by location then used arrange() to order
-#each grouped df by alphabetical order of city and descending test score (the .by_group parameter makes sure this ordering
-#is done within each location group). To retain only the top 3 test scores, I used slice_max and retained default with_ties = TRUE so that
-#more than 3 rows are returned if there are ties. Finally, select() retains only the desired variables with all the ordering retained.
+#To display top 3 scoring (include ties) managers by location, I first grouped the tbl by location then 
+#used filter() and dense_rank() to first rank the rows by descending test score (dense_rank does not skip
+#gaps when ranking) then filter for the top 3 scorers. Next, arrange reorders by city and the descending test
+#score within each group. Finally, select() retains only the desired variables with all the ordering retained
+#and print(n=24) sets display to the full output instead of just the top rows.
 
 week13_tbl %>% 
   group_by(city) %>% 
+  filter(
+    dense_rank(desc(test_score)) <= 3
+    ) %>% 
   arrange(city, desc(test_score), .by_group = T) %>% 
-  slice_max(test_score, n = 3, with_ties = T) %>% 
-  select(city, employee_id) 
+  select(city, employee_id) %>% 
+  print(n=24) 
 
 
