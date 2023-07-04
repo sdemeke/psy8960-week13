@@ -1,5 +1,5 @@
 #Script Settings and Resources
-#I blocked out steps to connect with MySQL and call on database because I have already saved table as week13.csv in data folder
+#I blocked out steps to connect with MySQL and call the database because I have already saved table as week13.csv in data folder
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(tidyverse)
 # library(RMariaDB)
