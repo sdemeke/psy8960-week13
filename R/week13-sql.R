@@ -17,7 +17,7 @@ con <- dbConnect(MariaDB(),
 
 dbExecute(con, "USE cla_tntlab")
 
-# 
+ 
 # Display the total number of managers.
 dbGetQuery(con,
            "SELECT COUNT(employee_id) AS total_number_managers 
@@ -55,7 +55,7 @@ dbGetQuery(con,
 
 dbGetQuery(con,
            "WITH added_test_rank AS (
-           SELECT	city, employee_id, test_score, RANK() OVER(PARTITION BY city ORDER BY test_score DESC) AS test_rank 
+           SELECT	city, employee_id, test_score, DENSE_RANK() OVER(PARTITION BY city ORDER BY test_score DESC) AS test_rank 
            FROM datascience_8960_table 
            ORDER BY city)
           
